@@ -6,7 +6,7 @@ const categoriesController = require("./categories/CategoriesController");
 const articlesController = require("./articles/ArticlesController");
 const Article = require('./articles/Article');
 
-const Category = require('./categories/Category')
+const Category = require('./categories/Category');
 
 //View engine
 app.set('view engine', 'ejs');
@@ -14,7 +14,7 @@ app.set('view engine', 'ejs');
 //Static
 app.use(express.static('public'))
 //Body-parser
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
 //Database
