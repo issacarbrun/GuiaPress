@@ -2,13 +2,14 @@ const express = require('express');
 const router = express.Router();
 const Category = require('./Category');
 const slugify = require('slugify')
+const adminAuth = require("../middlewares/adminAuth")
 
 router.get("/admin/categories/new",(req,res) =>{
     res.render("admin/categories/new");
 });
 
 //Salvando os dados do formulário no banco de dados na tabela categories
-router.post("/categories/save",(req,res) => {
+router.post("/categories/save",adminAuth,(req,res) => {
     var title = req.body.title;
     if(title !=undefined){
         Category.create({
@@ -23,13 +24,13 @@ router.post("/categories/save",(req,res) => {
 });
 
 //Pegando infomrações dentro da tabela categories e passando pela rota para mostrar em tabela html
-router.get("/admin/categories", (req,res) =>{
+router.get("/admin/categories", adminAuth,(req,res) =>{
     Category.findAll().then(categories => {
         res.render("admin/categories/index",{categories: categories});
     });    
 });
 
-router.post("/categories/delete", (req,res) => {
+router.post("/categories/delete", adminAuth,(req,res) => {
     var id = req.body.id;
     if(id != undefined){
         if(!isNaN(id)){
@@ -50,7 +51,7 @@ router.post("/categories/delete", (req,res) => {
 });
 
 //rota para editar categorias na tabela do BD
-router.get("/admin/categories/edit/:id", (req,res) => {
+router.get("/admin/categories/edit/:id", adminAuth,(req,res) => {
     var id = req.params.id;
     if(isNaN(id)){
         res.redirect("/admin/categories");
@@ -67,7 +68,7 @@ router.get("/admin/categories/edit/:id", (req,res) => {
 });
 
 
-router.post("/categories/update", (req,res) =>{
+router.post("/categories/update", adminAuth,(req,res) =>{
     var id = req.body.id;
     var title = req.body.title;
 

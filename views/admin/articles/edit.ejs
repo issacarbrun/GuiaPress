@@ -5,29 +5,41 @@
     <hr>
     <div class="card">
         <div class="card-header">
-            <h2>Novo Artigo</h2>
+            <h2>Editar Artigo</h2>
         </div>
         <div class="card-body">
-            <form method="post" action="/articles/save">
+            <form method="post" action="/articles/update">
+            <input type="hidden" value="<%= article.id %>" name="id">
             <input class="form-control" type="text" name="title" placeholder="Define o título do artigo"></input><br>
-            <label>Categorias</label>
+            <label>Categoria</label>
             <select name="category" class="form-control">
                 <% categories.forEach((category) => { %>
-                    <option value="<%= category.id %> "><%= category.title %> </option>
+                    <% if (category.id == article.categoryId) { %>
+                        <option value="<%= category.id %>" selected><%= category.title %> </option>                    
+                    <% } else { %>
+                        <option value="<%= category.id %>"><%= category.title %> </option>
+                        <% } %>
+                    
                 <% }) %>
             </select> <hr>
             <textarea class="form-control" id="article" name="body" placeholder="Escreva o artigo"></textarea>
-            <button class = " btn btn-success">Cadastrar</button>   
+            <button class = " btn btn-success">Atualizar</button>   
             </form>
         </div>
     </div>
 </div>
+
+<div id="content" style="display: none;">
+    <%= article.body %> 
+</div>
+
 <%- include ('../../partials/footer.ejs')  %> 
 
 <script src="/tinymce/tinymce.min.js"></script>
 <script>
     tinymce.init({
         selector: "#article",
+        
         plugins: [
             'advlist',
             'autolink',
@@ -46,6 +58,9 @@
             'table',
             'paste',
             'emoticons'
-        ]
+        ],
+        init_instance_callback: () => {
+            tinymce.get("article").setContent($("#content").html)
+        }
     })
 </script>
